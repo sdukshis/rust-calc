@@ -1,0 +1,4 @@
+[root]
+name = "rust-calc"
+version = "0.0.1"
+
