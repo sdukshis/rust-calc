@@ -1,6 +1,8 @@
+#[macro_use] extern crate log;
 use std::io;
 use std::fmt;
 
+#[derive(Show, PartialEq)]
 enum Op {
     Add,
     Sub,
@@ -19,6 +21,7 @@ impl fmt::String for Op {
     }
 }
 
+#[derive(Show, PartialEq)]
 enum Token {
     BinOp(Op),
     Number(i64),
@@ -83,7 +86,8 @@ impl<R: io::Reader> Lexer<R> {
         self.curr_char = match self.reader.read_byte() {
             Ok(c) => Ok(c as char),
             Err(e) => Err(e),
-        }
+        };
+        debug!("curr_char: {}", self.curr_char.as_ref().unwrap());
     }
 }
 
@@ -116,4 +120,24 @@ fn main() {
             Err(ref e) => { panic!("{}", e) },
         }
     }
+}
+
+struct MockReader {
+    ch: char
+}
+
+impl Reader for MockReader {
+    fn read_byte(&mut self) -> io::IoResult<u8> {
+        Ok('+' as u8)
+    }
+    fn read(&mut self, buf: &mut [u8]) -> io::IoResult<usize> {
+        Ok(0)
+    }
+}
+
+#[test]
+fn test_add_token() {
+    let mut lexer = Lexer::new(MockReader{ch: '+'});
+    let token = lexer.get_token();
+    assert_eq!(token, Ok(Token::BinOp(Op::Add)));
 }
