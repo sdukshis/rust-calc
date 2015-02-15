@@ -1,7 +1,7 @@
-use std::io;
+use std::old_io as io;
 use std::fmt;
 
-#[derive(Show, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum Token {
     BinOp(&'static str),
     Number(i64),

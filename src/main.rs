@@ -1,5 +1,5 @@
 #[macro_use] extern crate log;
-use std::io;
+use std::old_io as io;
 use std::fmt;
 use scanner::{Token, Scanner};
 mod scanner;
